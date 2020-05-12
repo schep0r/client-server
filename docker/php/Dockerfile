@@ -9,6 +9,7 @@ apt-get install -y wget && \
 apt-get install -y \
 zlib1g-dev
 
+RUN apt-get install -y zip unzip
 RUN docker-php-ext-install zip
 RUN docker-php-ext-enable apcu
 
@@ -19,10 +20,11 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && chmod 755 composer \
     && mv composer /usr/local/bin/composer
 
+ADD ./client /usr/src/client
+ADD ./server /usr/src/server
+
 WORKDIR /usr/src/client
-ADD client /usr/src/client
 RUN composer install
 
 WORKDIR /usr/src/server
-ADD server /usr/src/server
 RUN composer install
